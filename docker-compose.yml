@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+    # PHP Service container
+    laravel_eleven_app:
+        platform: linux/amd64
+        build:
+            args:
+                user: laravel_eleven_user
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel_eleven_app_image
+        container_name: laravel_eleven_app
+        restart: unless-stopped
+        depends_on:
+            -   laravel_eleven_app_mysql
+        working_dir: /var/www/assingment_api
+        volumes:
+            -   ./:/var/www/assingment_api
+        networks:
+            - laravel_eleven_app_network
+
+    #nginx service
+    laravel_eleven_webserver:
+        platform: linux/amd64
+        image: nginx:alpine
+        container_name: laravel_eleven_webserver_container
+        restart: unless-stopped
+        ports:
+            - "6162:80"
+        depends_on:
+            -   laravel_eleven_app
+        volumes:
+            -   ./:/var/www/assingment_api
+            - ./docker-compose/nginx/:/etc/nginx/conf.d
+        networks:
+            - laravel_eleven_app_network
+    #mysql service
+    laravel_eleven_app_mysql:
+        platform: linux/amd64
+        image: mysql:8.0
+        container_name: laravel_eleven_app_mysql_container
+        restart: unless-stopped
+        ports:
+            - "3337:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel_db
+            MYSQL_USER: rootuser
+            MYSQL_PASSWORD: rootuser
+        volumes:
+            -   ./:/var/lib/mysql1
+        networks:
+            - laravel_eleven_app_network
+
+volumes:
+    laravel_eleven_mysql_data:
+        driver: local
+networks:
+    laravel_eleven_app_network:
+        driver: bridge
