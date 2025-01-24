@@ -4,7 +4,7 @@ The purpose of this API is to provide a robust, scalable, and secure backend sys
 
 Key Features
 
-Secure Routes: All routes are protected to ensure only authenticated and authorized users can access the system. Security measures include token-based authentication and role-based access control (RBAC).
+Secure Routes: All routes are protected to ensure only authenticated and authorized users can access the system. Security measures include token-based authentication.
 
 Docker Support: The entire project is containerized using Docker to facilitate easy deployment and environment consistency.
 
